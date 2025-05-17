@@ -1,0 +1,32 @@
+{% extends 'store/base.html' %}
+
+{% block title %}
+    {% if category %}
+        Edit {{ category.name }} - Gadget Project
+    {% else %}
+        Add Category - Gadget Project
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h2>{% if category %}Edit Category{% else %}Add New Category{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" value="{{ category.name|default:'' }}" required>
+        </p>
+        <p>
+            <label for="slug">Slug (optional):</label><br>
+            <input type="text" id="slug" name="slug" value="{{ category.slug|default:'' }}">
+        </p>
+        <p>
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description">{{ category.description|default:'' }}</textarea>
+        </p>
+        <p>
+            <input type="submit" value="{% if category %}Update Category{% else %}Add Category{% endif %}">
+        </p>
+    </form>
+    <p><a href="{% url 'store:category_list' %}">Back to Categories</a></p>
+{% endblock %}

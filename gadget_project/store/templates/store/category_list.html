@@ -1,0 +1,26 @@
+{% extends 'store/base.html' %}
+
+{% block title %}
+    All Categories - Gadget Project
+{% endblock %}
+
+{% block content %}
+    <h2>All Categories</h2>
+    <p><a href="{% url 'store:category_add' %}">Add New Category</a></p>
+    <div class="category-grid">
+        {% for category in categories %}
+            <div class="category-card">
+                <h3><a href="{% url 'store:category_detail' category.slug %}">{{ category.name }}</a></h3>
+                <p>{{ category.description|default:"No description available." }}</p>
+                <p>
+                    <a href="{% url 'store:category_edit' category.slug %}">Edit</a> |
+                    <a href="{% url 'store:category_soft_delete' category.slug %}">Soft Delete</a> |
+                    <a href="{% url 'store:category_hard_delete' category.slug %}">Hard Delete</a>
+                </p>
+            </div>
+        {% empty %}
+            <p>No categories available.</p>
+        {% endfor %}
+    </div>
+    <p><a href="{% url 'store:product_list' %}">Back to Products</a></p>
+{% endblock %}

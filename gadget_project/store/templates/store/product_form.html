@@ -1,0 +1,58 @@
+{% extends 'store/base.html' %}
+
+{% block title %}
+    {% if product %}
+        Edit {{ product.name }} - Gadget Project
+    {% else %}
+        Add Product - Gadget Project
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h2>{% if product %}Edit Product{% else %}Add New Product{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" value="{{ product.name|default:'' }}" required>
+        </p>
+        <p>
+            <label for="slug">Slug (optional):</label><br>
+            <input type="text" id="slug" name="slug" value="{{ product.slug|default:'' }}">
+        </p>
+        <p>
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description">{{ product.description|default:'' }}</textarea>
+        </p>
+        <p>
+            <label for="price">Price:</label><br>
+            <input type="number" id="price" name="price" step="0.01" value="{{ product.price|default:'' }}" required>
+        </p>
+        <p>
+            <label for="stock">Stock:</label><br>
+            <input type="number" id="stock" name="stock" value="{{ product.stock|default:'' }}" required>
+        </p>
+        <p>
+            <label for="image_url">Image URL:</label><br>
+            <input type="url" id="image_url" name="image_url" value="{{ product.image_url|default:'' }}">
+        </p>
+        <p>
+            <label for="sku">SKU:</label><br>
+            <input type="text" id="sku" name="sku" value="{{ product.sku|default:'' }}" required>
+        </p>
+        <p>
+            <label for="category">Category:</label><br>
+            <select id="category" name="category" required>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if product.category.id == category.id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="{% if product %}Update Product{% else %}Add Product{% endif %}">
+        </p>
+    </form>
+    <p><a href="{% url 'store:product_list' %}">Back to Products</a></p>
+{% endblock %}

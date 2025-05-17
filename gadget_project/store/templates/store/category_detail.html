@@ -1,0 +1,34 @@
+{% extends 'store/base.html' %}
+
+{% block title %}
+    {{ category.name }} - Gadget Project
+{% endblock %}
+
+{% block content %}
+    <h2>{{ category.name }}</h2>
+    <p><strong>Description:</strong> {{ category.description|default:"No description available." }}</p>
+    <h3>Products in this Category:</h3>
+    <div class="product-grid">
+        {% for product in category.products.all %}
+            {% if not product.is_deleted %}
+                <div class="product-card">
+                    {% if product.image_url %}
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/150" alt="No image">
+                    {% endif %}
+                    <h4><a href="{% url 'store:product_detail' product.slug %}">{{ product.name }}</a></h4>
+                    <p>Price: ${{ product.price }}</p>
+                </div>
+            {% endif %}
+        {% empty %}
+            <p>No products in this category.</p>
+        {% endfor %}
+    </div>
+    <p>
+        <a href="{% url 'store:category_edit' category.slug %}">Edit</a> |
+        <a href="{% url 'store:category_soft_delete' category.slug %}">Soft Delete</a> |
+        <a href="{% url 'store:category_hard_delete' category.slug %}">Hard Delete</a>
+    </p>
+    <p><a href="{% url 'store:category_list' %}">Back to Categories</a></p>
+{% endblock %}
